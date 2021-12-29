@@ -1,0 +1,22 @@
+all: prog1 prog2
+
+prog1: libderivative.so
+	gcc prog1.c -o prog1 -L. -lderivative -Wl,-rpath,.
+
+prog2: libderivative.so libtranslation.so
+	gcc prog2.c -o prog2 -ldl -Wl,-rpath,.
+
+libderivative.so: libderivative.o
+	gcc libderivative.o -lm -shared -o libderivative.so
+
+libtranslation.so: libtranslation.o
+	gcc libtranslation.o -shared -o libtranslation.so
+
+libderivative.o:
+	gcc derivative.c -c -Wall -fpic -o libderivative.o
+
+libtranslation.o:
+	gcc translation.c -c -Wall -fpic -o libtranslation.o
+
+clean:
+	rm -f *.o *.so
